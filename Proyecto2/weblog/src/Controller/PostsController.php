@@ -24,6 +24,8 @@ class PostsController extends AppController
         $posts = $this->paginate($this->Posts);
 
         $this->set(compact('posts'));
+
+        $this->Authorization->skipAuthorization();
     }
 
     /**
@@ -40,6 +42,8 @@ class PostsController extends AppController
         ]);
 
         $this->set(compact('post'));
+
+        $this->Authorization->skipAuthorization();
     }
 
     /**
@@ -50,6 +54,7 @@ class PostsController extends AppController
     public function add()
     {
         $post = $this->Posts->newEmptyEntity();
+        $this->Authorization->authorize($post);
         if ($this->request->is('post')) {
             $post = $this->Posts->patchEntity($post, $this->request->getData());
             if ($this->Posts->save($post)) {
@@ -76,6 +81,7 @@ class PostsController extends AppController
         $post = $this->Posts->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($post);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $post = $this->Posts->patchEntity($post, $this->request->getData());
             if ($this->Posts->save($post)) {
@@ -101,6 +107,7 @@ class PostsController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $post = $this->Posts->get($id);
+        $this->Authorization->authorize($post);
         if ($this->Posts->delete($post)) {
             $this->Flash->success(__('The post has been deleted.'));
         } else {
