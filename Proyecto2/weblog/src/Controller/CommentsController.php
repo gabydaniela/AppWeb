@@ -24,6 +24,7 @@ class CommentsController extends AppController
         $comments = $this->paginate($this->Comments);
 
         $this->set(compact('comments'));
+        $this->Authorization->skipAuthorization();
     }
 
     /**
@@ -40,6 +41,7 @@ class CommentsController extends AppController
         ]);
 
         $this->set(compact('comment'));
+        $this->Authorization->skipAuthorization();
     }
 
     /**
@@ -49,6 +51,7 @@ class CommentsController extends AppController
      */
     public function add()
     {
+        $this->Authorization->authorize($post);
         $comment = $this->Comments->newEmptyEntity();
         if ($this->request->is('post')) {
             $comment = $this->Comments->patchEntity($comment, $this->request->getData());
@@ -72,6 +75,7 @@ class CommentsController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Authorization->authorize($post);
         $comment = $this->Comments->get($id, [
             'contain' => [],
         ]);
@@ -97,6 +101,7 @@ class CommentsController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->authorize($post);
         $this->request->allowMethod(['post', 'delete']);
         $comment = $this->Comments->get($id);
         if ($this->Comments->delete($comment)) {

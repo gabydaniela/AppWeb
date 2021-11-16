@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Authorization\IdentityInterface;
+
 /**
  * Users Controller
  *
@@ -26,7 +28,7 @@ class UsersController extends AppController
         $this->set(compact('users'));
 
         // All users can view index
-        //$this->Authorization->skipAuthorization();
+        $this->Authorization->skipAuthorization();
     }
 
     /**
@@ -45,7 +47,7 @@ class UsersController extends AppController
         $this->set(compact('user'));
 
         // All users can view user
-        //$this->Authorization->skipAuthorization();
+        $this->Authorization->skipAuthorization();
     }
 
     /**
@@ -56,9 +58,16 @@ class UsersController extends AppController
     public function add()
     {
         $user = $this->Users->newEmptyEntity();
-        //$this->Authorization->authorize($user);
+        $this->Authorization->authorize($user);
+
+        $role_current_user = $this->request->getAttribute('identity')->role_id;
+
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+            if ($role_current_user  != 1) {
+                // Changed: Set the role_id from 2 = author. 
+                $user->role_id = 2;
+            }
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
@@ -69,7 +78,7 @@ class UsersController extends AppController
         $roles = $this->Users->Roles->find('list', ['limit' => 200])->all();
         $authors = $this->Users->find()->all();
  
-        $this->set(compact('user', 'roles', 'authors'));
+        $this->set(compact('user', 'roles', 'authors', 'role_current_user'));
     }
 
     /**
@@ -84,7 +93,7 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => [],
         ]);
-        //$this->Authorization->authorize($user);
+        $this->Authorization->authorize($user);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -96,7 +105,9 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $roles = $this->Users->Roles->find('list', ['limit' => 200])->all();
-        $this->set(compact('user', 'roles'));
+        $role_current_user = $this->request->getAttribute('identity')->role_id;
+        
+        $this->set(compact('user', 'roles', 'role_current_user'));
     }
 
     /**
@@ -110,7 +121,7 @@ class UsersController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
-        //$this->Authorization->authorize($user);
+        $this->Authorization->authorize($user);
 
         if ($this->Users->delete($user)) {
             $this->Flash->success(__('The user has been deleted.'));
@@ -128,9 +139,6 @@ class UsersController extends AppController
         // Configure the login action to not require authentication, preventing
         // the infinite redirect loop issue
         $this->Authentication->addUnauthenticatedActions(['login']);
-
-        //CUIDADO
-        //$this->set($this->Auth->user('role_id'));
     }
 
     public function login()

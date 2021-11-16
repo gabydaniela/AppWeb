@@ -38,11 +38,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="<?= $this->Url->build('../../Posts/index') ?>">WeBlog</a>
+            <a href="<?= $this->Url->build('/Posts/index') ?>">WeBlog</a>
         </div>
         <div class="top-nav-links">
-            <a rel="noopener" href="<?= $this->Url->build('/') ?>">Log In</a>
-            <a rel="noopener" href="<?= $this->Url->build('/users/add') ?>">Sign up</a>
+            <a rel="noopener" href="<?= $this->Url->build('/Users/login') ?>">Log In</a>
+            <a rel="noopener" href="<?= $this->Url->build('/Users/logout') ?>">Log Out</a>
         </div>
     </nav>
     <main class="main">

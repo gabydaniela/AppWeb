@@ -31,10 +31,10 @@ class PostPolicy
      * @param App\Model\Entity\Post $post
      * @return bool
      */
-    public function canUpdate(IdentityInterface $user, Post $post)
+    public function canEdit(IdentityInterface $user, Post $post)
     {
         // logged in users can edit their own post.
-        return $this->isAuthor($user, $post);
+        return $user->get('role_id') === 1 || $this->isAuthor($user, $post);
     }
 
     /**
@@ -47,7 +47,7 @@ class PostPolicy
     public function canDelete(IdentityInterface $user, Post $post)
     {
         // logged in users can delete their own post.
-        return $this->isAuthor($user, $post);
+        return $user->get('role_id') === 1 || $this->isAuthor($user, $post);
     }
 
     /**
@@ -65,10 +65,4 @@ class PostPolicy
     {
         return $post->author_id === $user->getIdentifier();
     }
-
-    /*public function canIndex(IdentityInterface $user, Post $post)
-    {
-        // All logged in users can create posts.
-        return true;
-    }*/
 }

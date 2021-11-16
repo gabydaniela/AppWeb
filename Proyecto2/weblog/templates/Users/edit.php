@@ -26,7 +26,9 @@
                     echo $this->Form->control('username');
                     echo $this->Form->control('password');
                     echo $this->Form->control('email');
-                    echo $this->Form->control('role_id', ['options' => $roles]);
+                    if ($role_current_user == 1) {
+                        echo $this->Form->control('role_id', ['options' => $roles]);
+                    }
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

@@ -57,6 +57,10 @@ class PostsController extends AppController
         $this->Authorization->authorize($post);
         if ($this->request->is('post')) {
             $post = $this->Posts->patchEntity($post, $this->request->getData());
+
+            // Changed: Set the user_id from the current user.
+            $post->author_id = $this->request->getAttribute('identity')->getIdentifier();
+
             if ($this->Posts->save($post)) {
                 $this->Flash->success(__('The post has been saved.'));
 
@@ -78,12 +82,18 @@ class PostsController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Authorization->authorize($post);
+
         $post = $this->Posts->get($id, [
             'contain' => [],
         ]);
-        $this->Authorization->authorize($post);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $post = $this->Posts->patchEntity($post, $this->request->getData());
+
+            $post = $this->Posts->patchEntity($post, $this->request->getData(), [
+                // Added: Disable modification of user_id.
+                'accessibleFields' => ['author_id' => false]
+            ]);
             if ($this->Posts->save($post)) {
                 $this->Flash->success(__('The post has been saved.'));
 
@@ -105,6 +115,8 @@ class PostsController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->authorize($post);
+        
         $this->request->allowMethod(['post', 'delete']);
         $post = $this->Posts->get($id);
         $this->Authorization->authorize($post);

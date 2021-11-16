@@ -21,6 +21,8 @@ class RolesController extends AppController
         $roles = $this->paginate($this->Roles);
 
         $this->set(compact('roles'));
+
+        $this->Authorization->skipAuthorization();
     }
 
     /**
@@ -37,6 +39,8 @@ class RolesController extends AppController
         ]);
 
         $this->set(compact('role'));
+
+        $this->Authorization->skipAuthorization();
     }
 
     /**
@@ -47,6 +51,7 @@ class RolesController extends AppController
     public function add()
     {
         $role = $this->Roles->newEmptyEntity();
+        $this->Authorization->authorize($role);
         if ($this->request->is('post')) {
             $role = $this->Roles->patchEntity($role, $this->request->getData());
             if ($this->Roles->save($role)) {
@@ -71,6 +76,7 @@ class RolesController extends AppController
         $role = $this->Roles->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($role);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $role = $this->Roles->patchEntity($role, $this->request->getData());
             if ($this->Roles->save($role)) {
@@ -92,6 +98,7 @@ class RolesController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->authorize($role);
         $this->request->allowMethod(['post', 'delete']);
         $role = $this->Roles->get($id);
         if ($this->Roles->delete($role)) {

@@ -21,6 +21,8 @@ class CategoriesController extends AppController
         $categories = $this->paginate($this->Categories);
 
         $this->set(compact('categories'));
+
+        $this->Authorization->skipAuthorization();
     }
 
     /**
@@ -37,6 +39,8 @@ class CategoriesController extends AppController
         ]);
 
         $this->set(compact('category'));
+
+        $this->Authorization->skipAuthorization();
     }
 
     /**
@@ -47,6 +51,7 @@ class CategoriesController extends AppController
     public function add()
     {
         $category = $this->Categories->newEmptyEntity();
+        $this->Authorization->authorize($category); 
         if ($this->request->is('post')) {
             $category = $this->Categories->patchEntity($category, $this->request->getData());
             if ($this->Categories->save($category)) {
@@ -71,6 +76,7 @@ class CategoriesController extends AppController
         $category = $this->Categories->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($category); 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $category = $this->Categories->patchEntity($category, $this->request->getData());
             if ($this->Categories->save($category)) {
@@ -92,6 +98,7 @@ class CategoriesController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->authorize($category);
         $this->request->allowMethod(['post', 'delete']);
         $category = $this->Categories->get($id);
         if ($this->Categories->delete($category)) {

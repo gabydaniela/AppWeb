@@ -39,6 +39,7 @@ use Authorization\AuthorizationServiceInterface;
 use Authorization\AuthorizationServiceProviderInterface;
 use Authorization\Middleware\AuthorizationMiddleware;
 use Authorization\Policy\OrmResolver;
+use \Authorization\Exception\ForbiddenException;
 
 /**
  * Application setup class.
@@ -125,7 +126,17 @@ class Application extends BaseApplication
             ]));
 
         // Add authorization **after** authentication
-        $middlewareQueue->add(new AuthorizationMiddleware($this));
+        $middlewareQueue->add(new AuthorizationMiddleware($this, [
+                'unauthorizedHandler' => [
+                    'className' => 'Authorization.Redirect',
+                    'url' => '/posts/index',
+                    'queryParam' => 'redirectUrl',
+                    'exceptions' => [
+                        \Authorization\Exception\ForbiddenException::class,
+                    ],
+                ],
+            ])
+        );
 
         return $middlewareQueue;
     }

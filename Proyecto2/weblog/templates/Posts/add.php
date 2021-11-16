@@ -22,7 +22,6 @@
                     echo $this->Form->control('title');
                     echo $this->Form->control('abstract');
                     echo $this->Form->control('text');
-                    echo $this->Form->control('author_id', ['options' => $users]);
                     echo $this->Form->control('category_id', ['options' => $categories]);
                 ?>
             </fieldset>
