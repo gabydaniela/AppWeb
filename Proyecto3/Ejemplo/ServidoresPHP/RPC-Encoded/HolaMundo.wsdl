@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Descripción WSDL de la clase Hola Mundo. -->
+
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+			 xmlns:tns="urn:ECCI_HolaMundo"
+			 xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			 xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/"
+			 name="ECCI_HolaMundo"
+			 targetNamespace="urn:ECCI_HolaMundo">
+
+	<!-- Tipos complejos -->
+
+	<types>
+		<xsd:schema targetNamespace="urn:ECCI_HolaMundo"/>
+	</types>
+
+	<!-- Mensajes para comunicarse con la clase HolaMundo. -->
+
+	<message name="saludeIn">
+		<part name="nombre" type="xsd:string"/>
+	</message>
+
+	<message name="saludeOut">
+		<part name="return" type="xsd:string"/>
+	</message>
+
+	<message name="servidorEstampillaDeTiempoIn"/>
+
+	<message name="servidorEstampillaDeTiempoOut">
+		<part name="return" type="xsd:string"/>
+	</message>
+
+	<message name="ultimoSaludoIn"/>
+
+	<message name="ultimoSaludoOut">
+		<part name="return" type="xsd:string"/>
+	</message>
+
+	<!-- Puerto para comunicar con la clase HolaMundo, "ECCI_HolaMundo" -->
+
+	<portType name="ECCI_HolaMundoPort">
+		<operation name="salude">
+			<documentation>HolaMundo::salude() Saluda al Mundo o a $this-&gt;nombre o saluda a $nombre si $nombre no es vacío.</documentation>
+			<input message="tns:saludeIn"/>
+			<output message="tns:saludeOut"/>
+		</operation>
+		<operation name="servidorEstampillaDeTiempo">
+			<documentation>HolaMundo::servidorEstampillaDeTiempo() Devuelve el tiempo del servidor.</documentation>
+			<input message="tns:servidorEstampillaDeTiempoIn"/>
+			<output message="tns:servidorEstampillaDeTiempoOut"/>
+		</operation>
+		<operation name="ultimoSaludo">
+			<documentation>HolaMundo::ultimoSaludo() Devuelve el saludo guardado en la propiedad ultimo_saludo.</documentation>
+			<input message="tns:ultimoSaludoIn"/>
+			<output message="tns:ultimoSaludoOut"/>
+		</operation>
+	</portType>
+
+	<!-- Vinculación de los llamados con el transporte - RPC, SOAP/Encoded over HTTP -->
+
+	<binding name="ECCI_HolaMundoBinding" type="tns:ECCI_HolaMundoPort">
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		
+		<operation name="salude">
+			<soap:operation soapAction="urn:ECCI_HolaMundo#HolaMundo#salude"/>
+			<input>
+				<soap:body use="encoded"
+				           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+						   namespace="urn:ECCI_HolaMundo"/>
+			</input>
+			<output>
+				<soap:body use="encoded"
+				           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+						   namespace="urn:ECCI_HolaMundo"/>
+			</output>
+		</operation>
+		
+		<operation name="servidorEstampillaDeTiempo">
+			<soap:operation soapAction="urn:ECCI_HolaMundo#HolaMundo#servidorEstampillaDeTiempo"/>
+			<input>
+				<soap:body use="encoded"
+				           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+						   namespace="urn:ECCI_HolaMundo"/>
+			</input>
+			<output>
+				<soap:body use="encoded"
+				           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+						   namespace="urn:ECCI_HolaMundo"/>
+			</output>
+		</operation>
+		
+		<operation name="ultimoSaludo">
+			<soap:operation soapAction="urn:ECCI_HolaMundo#HolaMundo#ultimoSaludo"/>
+			<input>
+				<soap:body use="encoded"
+				           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+						   namespace="urn:ECCI_HolaMundo"/>
+			</input>
+			<output>
+				<soap:body use="encoded"
+				           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+						   namespace="urn:ECCI_HolaMundo"/>
+			</output>
+		</operation>
+	</binding>
+
+	<!-- Punto de comunicación con la clase HolaMundo -->
+
+	<service name="ECCI_HolaMundoService">
+		<port name="ECCI_HolaMundoPort" binding="tns:ECCI_HolaMundoBinding">
+			<soap:address location="http://titanic.ecci.ucr.ac.cr/~bsolano/HolaMundoServiceRPCEncoded/"/>
+		</port>
+	</service>
+</definitions>
