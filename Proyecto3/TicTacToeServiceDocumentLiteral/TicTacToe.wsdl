@@ -57,7 +57,6 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      </xsd:element>
       <xsd:element name="top10">
         <xsd:complexType />
       </xsd:element>
@@ -70,7 +69,6 @@
           </complexContent>
         </xsd:complexType>
       </xsd:element>
-
     </xsd:schema>
   </types>
 
