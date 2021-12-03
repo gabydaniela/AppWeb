@@ -21,11 +21,11 @@
       </xsd:element>
       <xsd:element name="iniciarTableroReturn">
         <xsd:complexType name="tablero">
-          <complexContent>
-            <restriction base="SOAP-ENC:Array">
-              <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]"/>
-            </restriction>
-          </complexContent>
+          <xsd:complexContent>
+            <xsd:restriction base="SOAP-ENC:Array">
+              <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+            </xsd:restriction>
+          </xsd:complexContent>
         </xsd:complexType>
       </xsd:element>
 
@@ -34,11 +34,11 @@
       </xsd:element>
       <xsd:element name="reiniciarJuegoReturn">
         <xsd:complexType name="tablero">
-          <complexContent>
-            <restriction base="SOAP-ENC:Array">
-              <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]"/>
-            </restriction>
-          </complexContent>
+          <xsd:complexContent>
+            <xsd:restriction base="SOAP-ENC:Array">
+              <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+            </xsd:restriction>
+          </xsd:complexContent>
         </xsd:complexType>
       </xsd:element>
 
@@ -48,7 +48,7 @@
       <xsd:element name="verificarEmpateReturn">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="empate" type="xsd:int"/>
+            <xsd:element name="empate" type="xsd:int" />
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
@@ -59,18 +59,18 @@
       <xsd:element name="verificarGanadorReturn">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="resultado" type="xsd:int"/>
+            <xsd:element name="resultado" type="xsd:int" />
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
 
       <xsd:element name="marcarCasilla">
         <xsd:complexType name="jugada">
-          <complexContent>
-            <restriction base="SOAP-ENC:Array">
-              <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:int[]"/>
-            </restriction>
-          </complexContent>
+          <xsd:complexContent>
+            <xsd:restriction base="SOAP-ENC:Array">
+              <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:int[]" />
+            </xsd:restriction>
+          </xsd:complexContent>
         </xsd:complexType>
       </xsd:element>
       <xsd:element name="marcarCasillaReturn">
