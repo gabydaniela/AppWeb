@@ -15,8 +15,12 @@
 
   <types xmlns="http://schemas.xmlsoap.org/wsdl/">
     <xsd:schema targetNamespace="urn:ECCI_TicTacToe">
-      <xsd:element name="iniciar">
-        <xsd:complexType name="jugadores">
+
+      <xsd:element name="iniciarTablero">
+        <xsd:complexType />
+      </xsd:element>
+      <xsd:element name="iniciarTableroReturn">
+        <xsd:complexType name="tablero">
           <complexContent>
             <restriction base="SOAP-ENC:Array">
               <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]"/>
@@ -24,110 +28,132 @@
           </complexContent>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="iniciarReturn">
+
+      <xsd:element name="reiniciarJuego">
+        <xsd:complexType />
+      </xsd:element>
+      <xsd:element name="reiniciarJuegoReturn">
+        <xsd:complexType name="tablero">
+          <complexContent>
+            <restriction base="SOAP-ENC:Array">
+              <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]"/>
+            </restriction>
+          </complexContent>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="verificarEmpate">
+        <xsd:complexType />
+      </xsd:element>
+      <xsd:element name="verificarEmpateReturn">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="iniciarResult" type="xsd:int" />
+            <xsd:element name="empate" type="xsd:int"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="marcarCasilla">
+
+      <xsd:element name="verificarGanador">
+        <xsd:complexType />
+      </xsd:element>
+      <xsd:element name="verificarGanadorReturn">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="casilla" type="xsd:int"/>
+            <xsd:element name="resultado" type="xsd:int"/>
           </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="marcarCasilla">
+        <xsd:complexType name="jugada">
+          <complexContent>
+            <restriction base="SOAP-ENC:Array">
+              <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:int[]"/>
+            </restriction>
+          </complexContent>
         </xsd:complexType>
       </xsd:element>
       <xsd:element name="marcarCasillaReturn">
-        <xsd:complexType name="marcarCasillaResult">
-          <complexContent>
-            <restriction base="SOAP-ENC:Array">
-              <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]"/>
-            </restriction>
-          </complexContent>
-        </xsd:complexType>
-      </xsd:element>
-      <xsd:element name="getGanador">
-        <xsd:complexType />
-      </xsd:element>
-      <xsd:element name="getGanadorReturn">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="getGanadorResult" type="xsd:string" />
+            <xsd:element name="exitoso" type="xsd:int"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="top10">
-        <xsd:complexType />
-      </xsd:element>
-      <xsd:element name="top10Return">
-        <xsd:complexType name="top10Result">
-          <complexContent>
-            <restriction base="SOAP-ENC:Array">
-              <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]"/>
-            </restriction>
-          </complexContent>
-        </xsd:complexType>
-      </xsd:element>
+      
     </xsd:schema>
   </types>
 
   <!-- Mensajes para comunicarse con la clase HolaMundo. -->
 
-  <message name="iniciarRequest">
-    <part name="parameters" element="tns:jugadores" />
+  <message name="iniciarTableroRequest">
+    <part name="parameters" element="tns:iniciarTablero" />
   </message>
 
-  <message name="iniciarResponse">
-    <part name="parameters" element="tns:iniciarReturn" />
+  <message name="iniciarTableroResponse">
+    <part name="parameters" element="tns:iniciarTableroReturn" />
+  </message>
+
+  <message name="reiniciarJuegoRequest">
+    <part name="parameters" element="tns:reiniciarJuego" />
+  </message>
+
+  <message name="reiniciarJuegoResponse">
+    <part name="parameters" element="tns:reiniciarJuegoReturn" />
+  </message>
+
+   <message name="verificarEmpateRequest">
+    <part name="parameters" element="tns:verificarEmpate" />
+  </message>
+
+  <message name="verificarEmpateResponse">
+    <part name="parameters" element="tns:verificarEmpateReturn" />
+  </message>
+
+   <message name="verificarGanadorRequest">
+    <part name="parameters" element="tns:verificarGanador" />
+  </message>
+
+  <message name="verificarGanadorResponse">
+    <part name="parameters" element="tns:verificarGanadorReturn" />
   </message>
 
   <message name="marcarCasillaRequest">
-    <part name="parameters" element="tns:casilla" />
+    <part name="parameters" element="tns:marcarCasilla" />
   </message>
 
   <message name="marcarCasillaResponse">
     <part name="parameters" element="tns:marcarCasillaReturn" />
   </message>
 
-  <message name="getGanadorRequest">
-    <part name="parameters" element="tns:getGanador" />
-  </message>
-
-  <message name="getGanadorResponse">
-    <part name="parameters" element="tns:getGanadorReturn" />
-  </message>
-
-  <message name="top10Request">
-    <part name="parameters" element="tns:top10" />
-  </message>
-
-  <message name="top10Response">
-    <part name="parameters" element="tns:top10Return" />
-  </message>
 
   <!-- Puerto para comunicar con la clase HolaMundo, "ECCI_HolaMundo" -->
 
   <portType name="ECCI_TicTacToePort">
 
-    <operation name="iniciar">
-      <input message="tns:saludeRequest" />
-      <output message="tns:saludeResponse" />
+    <operation name="iniciarTablero">
+      <input message="tns:iniciarTableroRequest" />
+      <output message="tns:iniciarTableroResponse" />
+    </operation>
+
+    <operation name="reiniciarJuego">
+      <input message="tns:reiniciarJuegoRequest" />
+      <output message="tns:reiniciarJuegoResponse" />
+    </operation>
+
+    <operation name="verificarEmpate">
+      <input message="tns:verificarEmpateRequest" />
+      <output message="tns:verificarEmpateResponse" />
+    </operation>
+
+    <operation name="verificarGanador">
+      <input message="tns:verificarGanadorRequest" />
+      <output message="tns:verificarGanadorResponse" />
     </operation>
 
     <operation name="marcarCasilla">
       <input message="tns:marcarCasillaRequest" />
       <output message="tns:marcarCasillaResponse" />
-    </operation>
-
-    <operation name="getGanador">
-      <input message="tns:getGanadorRequest" />
-      <output message="tns:getGanadorResponse" />
-    </operation>
-
-    <operation name="top10">
-      <input message="tns:top10Request" />
-      <output message="tns:top10Response" />
     </operation>
 
   </portType>
@@ -137,8 +163,38 @@
   <binding name="ECCI_TicTacToeBinding" type="tns:ECCI_TicTacToePort">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
 
-    <operation name="iniciar">
-      <soap:operation soapAction="urn:ECCI_TicTacToe#TicTacToe#iniciar" style="document" />
+    <operation name="iniciarTablero">
+      <soap:operation soapAction="urn:ECCI_TicTacToe#TicTacToe#iniciarTablero" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+
+  <operation name="reiniciarJuego">
+      <soap:operation soapAction="urn:ECCI_TicTacToe#TicTacToe#reiniciarJuego" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+
+    <operation name="verificarEmpate">
+      <soap:operation soapAction="urn:ECCI_TicTacToe#TicTacToe#verificarEmpate" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+
+    <operation name="verificarGanador">
+      <soap:operation soapAction="urn:ECCI_TicTacToe#TicTacToe#verificarGanador" style="document" />
       <input>
         <soap:body use="literal" />
       </input>
@@ -156,26 +212,7 @@
         <soap:body use="literal" />
       </output>
     </operation>
-
-    <operation name="getGanador">
-      <soap:operation soapAction="urn:ECCI_TicTacToe#TicTacToe#getGanador" style="document" />
-      <input>
-        <soap:body use="literal" />
-      </input>
-      <output>
-        <soap:body use="literal" />
-      </output>
-    </operation>
-
-    <operation name="top10">
-      <soap:operation soapAction="urn:ECCI_TicTacToe#TicTacToe#top10" style="document" />
-      <input>
-        <soap:body use="literal" />
-      </input>
-      <output>
-        <soap:body use="literal" />
-      </output>
-    </operation>
+    
   </binding>
 
   <!-- Punto de comunicación con la clase HolaMundo -->

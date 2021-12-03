@@ -18,12 +18,10 @@
  * @access public
  **/
 class TicTacToe {
-	private $jugador1 = '';
-	private $jugador2 = '';
-	//private $tablero = array('1','2', '3', '4', '5', '6', '7', '8', '9');
+	private $jugador;
 	private $tablero = array('-','-', '-', '-', '-', '-', '-', '-', '-');
-	private $marcador = '';
-	private $ganador = '';
+	//private $marcador = '';
+	private $gameOver = false;
 	private $primeros10 = array(
 		1 => array( 'jugador' => 0 ),
 		2 => array( 'jugador2' => 0 ),
@@ -43,190 +41,116 @@ class TicTacToe {
 	 * 
 	 * @param array[string] $jugadores
 	 **/
-	public function __construct( $jugadores = array('', '') ) {
-		$this->jugador1 = $jugadores[0];
-		$this->jugador2 = $jugadores[1];
-		$this->marcador = 'X'; //primer jugador marca con X
-	}
+	public function __construct( $jugadorInicial = 0) {
+		$this->jugador = $jugadorInicial;
+		$this->gameOver = false;
+		$this->tablero = $this->iniciarTablero();
+		//Falta inicializar los 10 jugadores primeros
+	}	
 
 	/**
-	 * TicTacToe::iniciar() Inicia el juego con los nombres de los jugadores
+     * iniciarTablero(): Inicializa los 9 botones de las casillas del juego poniendo 
+	 * numeros del 1 al 9
+	 * Retorna el tablero
 	 * 
-	 * @param array[string] $jugadores
-	 * @return int
-	 */
-	public function iniciar($jugadores) {
-		$this->jugador1 = $jugadores[0];
-		$this->jugador2 = $jugadores[1];
-
-		return 0;
-	}
-	
-	/**
-	 * TicTacToe::marcarCasilla() Marca la casilla seleccionada por el jugador
-	 * Asumimos que el jugador1 marcara con 'X' y el jugador2 con 'O'.
-	 * Retorna el tablero del juego
-	 * 
-	 * @param int $casilla
-	 * @return array[strings]
-	 **/
-	public function marcarCasilla($casilla) {
-		$posicion = $casilla - 1;
-
-		//Verifico si la casilla no estaba marcada
-		if ($this->tablero == '-'){
-			$this->tablero[$posicion] = $this->marcador; //marco posicion
-
-			//Verifico que si con marcar esa casilla no se ha terminado el juego
-			verificarGanador($this->marcador, $casilla);
-
-			//actualizo marcador para siguiente turno
-			if ($this->marcador == 'X') {
-				$this->marcador = 'O';
-			}
-			else {
-				$this->marcador = 'X';
-			}
-		}
+	 * @param array[string] $tablero
+    */
+	public function iniciarTablero(){
+        for($i = 1; $i <= 9; $i++){
+            $this->tablero[$i] = strval($i);
+        }
 
 		return $this->tablero;
-	}
+    }
 
 	/**
-	 * TicTacToe::verificarGanador() Determina si el juego ya terminó con la ultima casilla marcada, establece si hay ganador o empate.
+     * reiniciarJuego() = reinicia el tablero y las variables para volver a jugar
+	 * Retorna el tablero
 	 * 
-	 * @param string $jugador
-	 * @param int $casilla
-	 */
-	public function verificarGanador($marca, $casilla) {
-		$empate = true;
-		//determino jugador actual 
-		$jugadorActual = '';
-		if ($marca == 'X') {
-			$jugadorActual = $this->jugador1;
+	 * @param array[string] $tablero
+    */
+    public function reiniciarJuego(){
+		$this->jugador = 0;
+        $this->iniciarTablero();
+        $this->gameOver = false;
+
+		return $this->tablero;
+    }
+
+	/**
+     * boolean verificarEmpate casillas = verifica si ha ocurrido empate
+     * Devuelve 0 si hubo empate, 1 sino
+    */
+    public function verificarEmpate(){
+        $empate = 0;
+        for($i = 1; $i < 9; $i++){
+            if ($this->tablero[$i] >= '1' && $this->tablero[$i] <= '9')
+                $empate = 1;
+        }
+        return $empate;
+    }
+
+	/**
+     * int verificarGanador(int jugadorActual) = verifica si ya hay un ganador o si ocurrio empate
+     * Recibe el jugador actual que tiene el turno activo y acaba de marcar casilla
+     * Devuelve:
+     *      - (-2) si el juego no ha terminado
+     *      - (-1) si hubo empate
+     *      - 0 si gano jugador que marca con O
+     *      - 1 si gana jugador que marca X
+    */
+    public function verificarGanador($jugadorActual) {
+        $resultado = -2;
+        
+        if(     ($this->tablero[0] == $this->tablero[1] && $this->tablero[1] == $this->tablero[2]) ||
+                ($this->tablero[3] == $this->tablero[4] && $this->tablero[4] == $this->tablero[5]) ||
+                ($this->tablero[6] == $this->tablero[7] && $this->tablero[7] == $this->tablero[8]) ||
+                ($this->tablero[0] == $this->tablero[4] && $this->tablero[4] == $this->tablero[8]) ||
+                ($this->tablero[6] == $this->tablero[4] && $this->tablero[4] == $this->tablero[2]) ||
+                ($this->tablero[0] == $this->tablero[3] && $this->tablero[3] == $this->tablero[6]) ||
+                ($this->tablero[1] == $this->tablero[4] && $this->tablero[4] == $this->tablero[7]) ||
+                ($this->tablero[2] == $this->tablero[5] && $this->tablero[5] == $this->tablero[8])) {
+            
+            $resultado = $jugadorActual;
+        }
+        else {
+			if ( $this->verificarEmpate() ) {
+            	$resultado = -1;
+			}
+		}
+        
+        return $resultado;
+    }	
+
+	/**
+	 * marcarCasilla(array(int)) = marca la casilla en el tablero segun jugador 
+	 * Recibe un vector de int donde la primera posicion es el jugador y la segunda
+	 * la casilla.
+	 * Devuelve 0 si se marco exitosamente o 1 sino
+	 *  
+	 * @param array[int] $jugada
+    */
+    public function marcarCasilla($jugada){
+		$casilla = $jugada[1] - 1;
+		$exitoso = 0;
+		if ($jugada[0] == 0) {
+			if ($this->tablero[$casilla] != 'X' && $this->tablero[$casilla] != 'O') {
+				$this->tablero[$casilla] = 'O';
+			}
+			else {
+				$exitoso = 1;
+			}
 		}
 		else {
-			$jugadorActual = $this->jugador2;
-		}
-
-		//valido si ya hay ganador
-		switch($casilla){
-			case 1:
-				if ( ($this->tablero[1] == $marca && $this->tablero[2] == $marca) ||
-				($this->tablero[3] == $marca && $this->tablero[6] == $marca) ||
-				($this->tablero[4] == $marca && $this->tablero[8] == $marca)
-				){
-					$this->ganador = $jugadorActual;
-					$empate = false;
-				}
-				break;
-
-			case 2:
-				if ( ($this->tablero[0] == $marca && $this->tablero[2] == $marca) ||
-				($this->tablero[4] == $marca && $this->tablero[7] == $marca)
-				){
-					$this->ganador = $jugadorActual;
-					$empate = false;
-				}
-				break;
-
-			case 3:
-				if ( ($this->tablero[0] == $marca && $this->tablero[1] == $marca) ||
-				($this->tablero[5] == $marca && $this->tablero[8] == $marca) ||
-				($this->tablero[4] == $marca && $this->tablero[6] == $marca)
-				){
-					$this->ganador = $jugadorActual;
-					$empate = false;
-				}
-				break;
-
-			case 4:
-				if ( ($this->tablero[0] == $marca && $this->tablero[6] == $marca) ||
-				($this->tablero[4] == $marca && $this->tablero[5] == $marca)
-				){
-					$this->ganador = $jugadorActual;
-					$empate = false;
-				}
-				break;
-
-			case 5:
-				if ( ($this->tablero[0] == $marca && $this->tablero[8] == $marca) ||
-				($this->tablero[1] == $marca && $this->tablero[7] == $marca) ||
-				($this->tablero[3] == $marca && $this->tablero[5] == $marca)
-				){
-					$this->ganador = $jugadorActual;
-					$empate = false;
-				}
-				break;
-
-			case 6:
-				if ( ($this->tablero[2] == $marca && $this->tablero[8] == $marca) ||
-				($this->tablero[4] == $marca && $this->tablero[3] == $marca)
-				){
-					$this->ganador = $jugadorActual;
-					$empate = false;
-				}
-				break;
-
-			case 7:
-				if ( ($this->tablero[0] == $marca && $this->tablero[3] == $marca) ||
-				($this->tablero[4] == $marca && $this->tablero[2] == $marca) ||
-				($this->tablero[7] == $marca && $this->tablero[8] == $marca)
-				){
-					$this->ganador = $jugadorActual;
-					$empate = false;
-				}
-				break;
-
-			case 8:
-				if ( ($this->tablero[6] == $marca && $this->tablero[8] == $marca) ||
-				($this->tablero[4] == $marca && $this->tablero[1] == $marca)
-				){
-					$this->ganador = $jugadorActual;
-					$empate = false;
-				}
-				break;
-
-			case 9:
-				if ( ($this->tablero[0] == $marca && $this->tablero[4] == $marca) ||
-				($this->tablero[5] == $marca && $this->tablero[2] == $marca) ||
-				($this->tablero[7] == $marca && $this->tablero[6] == $marca)
-				){
-					$this->ganador = $jugadorActual;
-					$empate = false;
-				}
-				break;
-		}
-
-		$indice = 0;
-		while ($empate && $indice < 9) {
-			if ($this->tablero[$indice] == '-' ) {
-				$empate = false;
+			if ($this->tablero[$casilla] != 'X' && $this->tablero[$casilla] != 'O') {
+				$this->tablero[$casilla] = 'X';
 			}
-			$indice++;
+			else {
+				$exitoso = 1;
+			}
 		}
-		if ($indice == 9 && $empate) {
-			$this->ganador = 'EMPATE';
-		}
-	}
-	
-	/**
-	 * TicTacToe::getGanador() Devuelve '' si no ha terminado eñ juego, el nombre del jugador si ya hay un ganador 
-	 * o 'EMPATE' si ha ocurrido un empate
-	 * 
-	 * @return string 
-	 **/
-	public function getGanador() {
-		return $this->ganador;
-	}
-	
-	/**
-	 * TicTacToe::top10() Devuelve los 10 jugadores con mejores tiempos
-	 * 
-	 * @return array[string]
-	 **/
-	public function top10() {
-		return $this->primeros10;
+
+		return $exitoso;
 	}
 }
 
