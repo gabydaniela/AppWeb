@@ -51,30 +51,32 @@ class TicTacToe {
 	/**
      * iniciarTablero(): Inicializa los 9 botones de las casillas del juego poniendo 
 	 * numeros del 1 al 9
-	 * Retorna el tablero
+	 * Retorna 0 si inicio exitosamente 1 sino
 	 * 
 	 * @param array[string] $tablero
     */
 	public function iniciarTablero(){
+		$inicioExitoso = 0;
         for($i = 1; $i <= 9; $i++){
             $this->tablero[$i] = strval($i);
         }
 
-		return $this->tablero;
+		return $inicioExitoso;
     }
 
 	/**
      * reiniciarJuego() = reinicia el tablero y las variables para volver a jugar
-	 * Retorna el tablero
+	 * Retorna 0 si inicio exitosamente 1 sino
 	 * 
 	 * @param array[string] $tablero
     */
     public function reiniciarJuego(){
+		$reinicioExitoso = 0;
 		$this->jugador = 0;
         $this->iniciarTablero();
         $this->gameOver = false;
 
-		return $this->tablero;
+		return $reinicioExitoso;
     }
 
 	/**
@@ -131,11 +133,12 @@ class TicTacToe {
 	 * @param array[int] $jugada
     */
     public function marcarCasilla($jugada){
-		$casilla = $jugada[1] - 1;
+		$casilla = $jugada - 1;
 		$exitoso = 0;
-		if ($jugada[0] == 0) {
+		if ($this->jugador == 0) {
 			if ($this->tablero[$casilla] != 'X' && $this->tablero[$casilla] != 'O') {
 				$this->tablero[$casilla] = 'O';
+				$this->jugador = 1;	//cambio para siguiente jugador
 			}
 			else {
 				$exitoso = 1;
@@ -144,6 +147,7 @@ class TicTacToe {
 		else {
 			if ($this->tablero[$casilla] != 'X' && $this->tablero[$casilla] != 'O') {
 				$this->tablero[$casilla] = 'X';
+				$this->jugador = 0;	//cambio para siguiente jugador
 			}
 			else {
 				$exitoso = 1;

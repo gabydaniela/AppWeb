@@ -33,5 +33,22 @@
         <delete dir="${build.generated.dir}/jax-wsCache/TicTacToe"/>
         <delete dir="${build.generated.sources.dir}/jax-ws/tictactoeclient"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-TicTacToe"/>
+    <target name="wsimport-client-TicTacToe_1" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/TicTacToe_1"/>
+        <property name="wsdl-TicTacToe_1" location="xml-resources/web-service-references/TicTacToe_1/wsdl/titanic.ecci.ucr.ac.cr/_eb25247/AppWeb/Proyecto3/TicTacToeServiceDocumentLiteral/TicTacToe.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/TicTacToe_1" destdir="${build.generated.dir}/jax-wsCache/TicTacToe_1" wsdl="${wsdl-TicTacToe_1}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://titanic.ecci.ucr.ac.cr/~eb25247/AppWeb/Proyecto3/TicTacToeServiceDocumentLiteral/TicTacToe.wsdl" xnocompile="true" xendorsed="true" package="tictactoeclientservice">
+            <depends file="${wsdl-TicTacToe_1}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/TicTacToe_1"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/TicTacToe_1">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-TicTacToe_1" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/TicTacToe_1"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/tictactoeclientservice"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-TicTacToe, wsimport-client-TicTacToe_1"/>
 </project>

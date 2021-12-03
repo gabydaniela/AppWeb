@@ -20,10 +20,12 @@
         <xsd:complexType />
       </xsd:element>
       <xsd:element name="iniciarTableroReturn">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="inicioExitoso" type="xsd:int" />
-          </xsd:sequence>
+        <xsd:complexType name="tablero">
+          <xsd:complexContent>
+            <xsd:restriction base="SOAP-ENC:Array">
+              <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+            </xsd:restriction>
+          </xsd:complexContent>
         </xsd:complexType>
       </xsd:element>
 
@@ -32,10 +34,11 @@
       </xsd:element>
       <xsd:element name="reiniciarJuegoReturn">
         <xsd:complexType name="tablero">
-          <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="reinicioExitoso" type="xsd:int" />
-          </xsd:sequence>
+          <xsd:complexContent>
+            <xsd:restriction base="SOAP-ENC:Array">
+              <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+            </xsd:restriction>
+          </xsd:complexContent>
         </xsd:complexType>
       </xsd:element>
 
@@ -62,10 +65,12 @@
       </xsd:element>
 
       <xsd:element name="marcarCasilla">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="jugada" type="xsd:int"/>
-          </xsd:sequence>
+        <xsd:complexType name="jugada">
+          <xsd:complexContent>
+            <xsd:restriction base="SOAP-ENC:Array">
+              <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:int[]" />
+            </xsd:restriction>
+          </xsd:complexContent>
         </xsd:complexType>
       </xsd:element>
       <xsd:element name="marcarCasillaReturn">
