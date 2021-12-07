@@ -22,6 +22,7 @@ class TicTacToe {
 	private $tablero = array('-','-', '-', '-', '-', '-', '-', '-', '-');
 	//private $marcador = '';
 	private $gameOver = false;
+	private $inicioExitoso;
 	private $primeros10 = array(
 		1 => array( 'jugador' => 0 ),
 		2 => array( 'jugador2' => 0 ),
@@ -56,12 +57,12 @@ class TicTacToe {
 	 * @param array[string] $tablero
     */
 	public function iniciarTablero(){
-		$inicioExitoso = 0;
+		$this->inicioExitoso = 0;
         for($i = 1; $i <= 9; $i++){
             $this->tablero[$i] = strval($i);
         }
 
-		return $inicioExitoso;
+		return $this->inicioExitoso;
     }
 
 	/**

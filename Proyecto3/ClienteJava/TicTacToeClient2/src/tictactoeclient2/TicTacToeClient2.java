@@ -1,28 +1,39 @@
-package tictactoeclient;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package tictactoeclient2;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.xml.ws.BindingProvider;
 
 /**
  *
- * @author Daniela Quesada
+ * @author ecci
  */
-public class TicTacToeClient {
+public class TicTacToeClient2 {
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+        // TODO code application logic here
         TicTacToe tictactoeGame = new TicTacToe();
     }
+    
 }
 
 class TicTacToe extends JFrame implements ActionListener {
-    private final tictactoeclient.ECCITicTacToePort tictactoe; 
+    private final tictactoeclient2.ECCITicTacToePort tictactoe; 
     
     JButton[] botones;      //Casillas del tablero
     JButton reiniciar;
@@ -33,7 +44,7 @@ class TicTacToe extends JFrame implements ActionListener {
     boolean gameOver = false;   //Indica si el juego termino ya 
 
     TicTacToe(){
-        tictactoeclient.ECCITicTacToe service = new tictactoeclient.ECCITicTacToe();
+        tictactoeclient2.ECCITicTacToe service = new tictactoeclient2.ECCITicTacToe();
         tictactoe = service.getECCITicTacToePort();
         ((BindingProvider)tictactoe).getRequestContext().put(BindingProvider.SESSION_MAINTAIN_PROPERTY,true);
         
@@ -79,6 +90,7 @@ class TicTacToe extends JFrame implements ActionListener {
      * iniciarTablero(): Inicializa los 9 botones de las casillas del juego poniendo guiones
     */
     private void iniciarTablero(){
+        int resultado = tictactoe.iniciarTablero();
         for(int i = 1; i <= 9; i++){
             botones[i] = new JButton("" + i);
         }

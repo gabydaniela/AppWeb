@@ -80,7 +80,7 @@
 
   <!-- Puerto para comunicar con la clase HolaMundo, "ECCI_HolaMundo" -->
 
-  <portType name="ECCI_HolaMundoPort">
+  <portType name="ECCI_ ">
 
     <operation name="salude">
       <input message="tns:saludeRequest" />

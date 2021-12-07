@@ -30,7 +30,7 @@
       <xsd:element name="reiniciarJuego">
         <xsd:complexType />
       </xsd:element>
-      <xsd:element name="reiniciarJuegoReturn">+
+      <xsd:element name="reiniciarJuegoReturn">
           <xsd:complexType>
           <xsd:sequence>
             <xsd:element name="reinicioExitoso" type="xsd:int" />
@@ -209,7 +209,7 @@
     
   </binding>
 
-  <!-- Punto de comunicación con la clase TicTacToe -->
+  <!-- Punto de comunicación con la clase HolaMundo -->
 
   <service name="ECCI_TicTacToe">
     <documentation />
