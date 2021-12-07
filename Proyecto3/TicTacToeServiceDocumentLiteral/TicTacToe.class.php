@@ -22,7 +22,7 @@ class TicTacToe {
 	private $tablero = array('-','-', '-', '-', '-', '-', '-', '-', '-');
 	//private $marcador = '';
 	private $gameOver = false;
-	private $inicioExitoso;
+	private $inicioExitoso = 0;
 	private $primeros10 = array(
 		1 => array( 'jugador' => 0 ),
 		2 => array( 'jugador2' => 0 ),
